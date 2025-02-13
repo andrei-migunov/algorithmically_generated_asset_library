@@ -2,7 +2,6 @@ import bpy
 import math
 import os
 
-
 blend_file_path = "generated_tree3d_wleaves.blend"
 
 if os.path.exists(blend_file_path):
