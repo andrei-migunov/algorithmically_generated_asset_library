@@ -1,0 +1,30 @@
+import bpy
+
+#the code from here to the comment "code end" selects the default cube
+default_cube = bpy.data.objects.get("Cube")
+
+if default_cube and default_cube.type == 'MESH':  # Ensure it's the cube mesh
+    # Select the object
+    default_cube.select_set(True)
+    
+    # Set it as the active object
+    bpy.context.view_layer.objects.active = default_cube
+else:
+    print("Default cube not found or it's not a mesh object.")
+#code end
+
+#this code switches to edit mode
+bpy.ops.object.mode_set(mode='EDIT')
+
+#creates a loop cut on default cube
+bpy.ops.mesh.loopcut_slide(MESH_OT_loopcut={"number_cuts":1, "smoothness":0, "falloff":'INVERSE_SQUARE', "object_index":0, "edge_index":9, "mesh_select_mode_init":(True, False, False)}, TRANSFORM_OT_edge_slide={"value":0, "single_side":False, "use_even":False, "flipped":False, "use_clamp":True, "mirror":False, "snap":False, "snap_elements":{'INCREMENT'}, "use_snap_project":False, "snap_target":'CLOSEST', "use_snap_self":True, "use_snap_edit":True, "use_snap_nonedit":True, "use_snap_selectable":False, "snap_point":(0, 0, 0), "correct_uv":True, "release_confirm":False, "use_accurate":False})
+
+#stretches cube at loop cut
+bpy.ops.transform.resize(value=(1.15, 1, 1), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(True, False, False), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False, snap=False, snap_elements={'INCREMENT'}, use_snap_project=False, snap_target='CLOSEST', use_snap_self=True, use_snap_edit=True, use_snap_nonedit=True, use_snap_selectable=False)
+
+# Select the two opposite faces by their face indices
+bpy.ops.mesh.select_all(action='DESELECT')  # Deselect all faces first
+bpy.ops.mesh.select_face_by_index(index=2)  # Select the front face (index 2)
+bpy.ops.mesh.select_face_by_index(index=3)  # Select the back face (index 3)
+#shortens cube at ends
+bpy.ops.transform.resize(value=(0.684261, 1, 1), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(True, False, False), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False, snap=False, snap_elements={'INCREMENT'}, use_snap_project=False, snap_target='CLOSEST', use_snap_self=True, use_snap_edit=True, use_snap_nonedit=True, use_snap_selectable=False)
