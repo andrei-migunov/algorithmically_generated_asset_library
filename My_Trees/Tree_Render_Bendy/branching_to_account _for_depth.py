@@ -2,19 +2,32 @@ import bpy
 import math
 import os
 import random
+from pathlib import Path
 
-# File path where the tree will be saved
-blend_file_path = "connected_low_poly_tree.blend"
+# Get the path to the current script's directory
+script_dir = Path(__file__).parent
 
-blend_name = "generated_tree3d_bendy_wleavesTest0.blend"
-blend_folder_path = r"C:\Users\Braedon\OneDrive - Drake University\Research & Clubs\Andrei (Algorithmically generated Assets)\My_Trees\Tree_Render_Bendy\Bendy_Trees"
-full_path = os.path.join(blend_folder_path, blend_name)
+# Define the folder for saving the generated blend files
+blend_folder_path = script_dir / "Bendy_Trees"
 
+# Ensure the folder exists (create it if it doesn't)
+blend_folder_path.mkdir(parents=True, exist_ok=True)
+
+# Define the name of the blend file base (without the extension)
+base_blend_name = "generated_tree3d_bendy_wleavesTest"
+
+# Build the full path to the .blend file
+blend_name = f"{base_blend_name}.blend"
+full_path = blend_folder_path / blend_name
+
+# Check if the file already exists, and if so, modify the filename to avoid overwriting
 i = 0
 while os.path.exists(full_path):
-    full_path = full_path[:-7]
-    full_path = full_path + str(i) + ".blend"
-    i+=1
+    # Generate the next numbered filename
+    blend_name = f"{base_blend_name}{i}.blend"
+    full_path = blend_folder_path / blend_name
+    i += 1
+
 
 def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness=0.2, thickness_reduction=0.7):
     # Clear existing objects
@@ -145,11 +158,6 @@ thickness_reduction = 0.6 # Rate at which thickness decreases with each level
 # Run the function to create the tree
 create_connected_low_poly_tree(branch_count, max_height, trunk_thickness, thickness_reduction)
 
-# Save the tree to a .blend file
-#if os.path.exists(blend_file_path):
-#    os.remove(blend_file_path)
-#bpy.ops.wm.save_as_mainfile(filepath=blend_file_path)
-
-bpy.ops.wm.save_as_mainfile(filepath=full_path)
-
-print("Connected low-poly tree generated with smooth connections and saved to", blend_folder_path)
+#save the file and print completion confirmation
+bpy.ops.wm.save_as_mainfile(filepath=str(full_path))
+print(f"Connected low-poly tree generated and saved to {blend_folder_path}")
