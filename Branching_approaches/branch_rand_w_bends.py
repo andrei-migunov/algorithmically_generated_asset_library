@@ -139,4 +139,3 @@ if os.path.exists(blend_file_path):
 bpy.ops.wm.save_as_mainfile(filepath=blend_file_path)
 
 print("Connected low-poly tree generated with smooth connections and saved to", blend_file_path)
-print("Connected low-poly tree generated with smooth connections and saved to", blend_file_path)
