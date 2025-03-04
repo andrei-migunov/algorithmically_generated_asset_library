@@ -1,0 +1,51 @@
+- Real trees tend to have "main branches", and rather than splitting several new branches at the end of each
+    branch, will have several smaller, less thick, branches branching off of the main branch. These smaller
+    branches then become main branches themselves. The current model only splits at the end of each branch
+    and the thickness of the branch is equal for each branch at the same depth in the tree. It might be good
+    to try creating some code that assigns main branches, and has a parameter for deciding how many sub
+    branches that main branch has and also how much thickness is lost. There could be a number of ways to do this.
+    - (1) Make an imitation of this behavior by faking a "main branch"
+        - rather than actually creating a main branch, we can alter the properties of the first branch at each
+            branching point so that that branch appears as if it is an elongation of the previous branch. To do
+            this, we would likely have to alter the thickness reduction of only the first branch and leave the
+            other branches as they would have been. Furthermore, we would likely want this to stay consistant with
+            each continuation of the fake main branch. It might be a good idea to create a value that determines
+            the thikness of the pseudo main branch in relation to other non-main-branch branches.
+        - It would also be a good idea to have a feature where the main branch is more likely to have a more
+            perpendicular angle with the previous continuation of the main branch, while non-main-branch branches
+            are more likely to resemble a right angle, or at least be more angled than the main branch.
+        - Lastly, although this is less of a feature and more of a reminder, it is important to take into account
+            each non-main-branch will become it's own main branch once it splits from its parent main branch.
+- On top of the previously mentioned issue of main branches, I also believe that there is an issue of reduced
+    branch length that should be addressed. The current model only takes into account a reduction of thickness
+    as the depth of the tree becomes greater, but real trees also appear to typicaaly have a reduction in length
+    between branch splits as you go deeper into the tree. I think this is a very important distinction to make and
+    is likely one of the key culprits as to why the current model has a more spindley appearance, as well as why it
+    may appear sparse of branches at deeper levels. To fix this would be fairly easy.
+    - (1) Create a branch length reduction factor.
+        - to reduce the branch length, the easiest solution would likely be to create a parameter works almost the
+            exact same as the current thickness_reduction parameter, only instead of thickness it would be for length.
+- Another point to notice is that with the current model, each branching point is at a fairly predictable length, and even if the
+    branch length reduction feature is added, there will still remain the fact that there would be a high degree of predictability
+    in how long a branch will be. Trees may have many predictable trends, however there is still a certain level of
+    unpredictability that is characterized by them. To fix this, I think it would be best to implement a certain chance that
+    any particular branch is unusually short or long.
+    - (1) Add randomness to branch length (there are two main ways I see we go about this)
+        - The first is to go out and actually measure the variability of branch point length on real trees, which would
+            require a large amount of effort, and likely a verry tall ladder, but it would likely also give us the most
+            accurate results.
+        - The second option would be to simply implement the random feature in python to choose a random value for unusual branch
+            length possibility, for example have a 3% chance that the branch be a third of the originaly intended length. This 
+            would only be applied at the final step and therefore wouldn't influence the length of future branches.
+                - currently I believe option 2 is the best solution.
+- One verry noticable issue with the trees being generated is that branches are intersecting with eachother or even going
+    the same way from the same branching point, this is something that makes the trees look verry unnatural, however it is
+    also the issue that i believe will be the most difficult to fix. As of now, I know that blender has a modifier that
+    is used to prune randomly generated objects that are created too close to eachother, I do not remember the name at the
+    moment, however I will try to find it and understand how it works to see if something similar can be incorporated into
+    the tree model. Also, because branches habitually will move to areas with more open space to recieve more light, it may
+    be useful to acknowledge where branches have room to grow as an important factor as well.
+
+Other Possibilities
+- mess with bevel resolution*
+- 
