@@ -1,0 +1,84 @@
+# FRom a youtube video comment below
+
+https://www.youtube.com/watch?v=y7PdiGXbrD0&ab_channel=CGGeek
+
+EDIT: All right guys, this took me like 6 hours (in researching, learning, typing  and etc), but, here are all the steps to achieve all shown in the video, I can happily say now that my journey in blender has just begun, I'm enjoing it and that I'm not a total noob anymore. Lol. 
+I hope this help you all too.
+
+Me, a total noob: '' One-minute tutorial, alright! this gonna be good!
+Geek: ''Control R and...
+tries command ... [Ctrl+r doesn't work]
+Me: ''1 sec and I'm already screwed...
+
+(When you're using a tool you can RMB(Right Mouse Button) any time before finishing using it to cancel it, this is very useful, don't forget about it.)
+
+Hold (Ctrl + Tab) , then press the number of the Mode you want to pick shown in the pie menu(6 to Edit mode) or select it with the cursor (Edit Mode), and release 
+Alt + Z to toggle Xray to see throw the solid, (or just Z to show pie menu and choose other viewport shading options)
+Ctrl + R to add a ring (Now it works)
+1 to choose vertex (2 to edges and 3 to faces) 
+with chosen vertexes S to Scale then Y to scale just in that axis (same works with X and Z, and, holding Shift you do it on that plane)
+3 to select faces and hold shift to add selection by clicking on the center points shown of each face
+0:05
+Numpad1 to change the view to Y plane on the viewport (Numpad3 to X, 7 to Z top, 9 to Z bottom, 5 toggles orthogonal and perspective, and the other to navigate. Also works holding Alt and dragging mouse whell)
+Use R to rotate and G to grab and move (just like with Scale, here works the Y, X, Z, and hold Shift commands too)
+Ctrl + click RMB to extrude and regularly use S, R, and G to construct the branches of your tree
+0:11
+Ctrl + Tab, 4 or choose in pie menu to go Object mode 
+Shift + A to open add menu
+choose your image
+Ctrl + Tab(+6), return to Edit Mode 
+Ctrl + R to add rings (We meet again! Now I'm the master!! lmao)
+add more branches
+(0:20)
+Ctrl + Tab (+4) and go to Object Mode 
+Shift + A, Image, Images as Planes (if the option is not there, go to Edit, Preferences, Addons and type 'Images as Planes' in the searchbox, check the option and close, now you'll find the option in the menu)
+Ctrl + Tab back to Edit Mode 
+Numpad7 to go top view, align the 'root' of the branch to the plane's gizmo (orange dot) 
+Ctrl + R to activate 'loop cuts' (now we even know its name) point close to an edge to the cut preview to appears from that edge, roll the mouse wheel to add or rest cuts and then click, now moving the mouse you adjust its location, click
+3 to select faces, drag LMB to multi select, or hold shift to add selections, remember to click on the face's center point to add it 
+Shift + K to Knife tool and make the cuts, when finished press enter
+1 to vertex and G to add variation
+0:29
+ change to Object mode, select the tree, and go back to Edit mode
+ (Now you know how to do it, right? Hold Ctrl + Tab, then #, or hover on and release)
+Click on the green triangle on the lower right panel (Object data properties), Vertex Groups, there's a + sign there, press it to create a group, now go to the viewport
+C to circle selection and use mouse wheel to adjust its radius, or W to cycle selection until getting the circle (both are different), 
+1 to vertex, now, hold shift and hover the branches to select all its vertexes 
+go to groups again and click the Assign button
+Ctrl + Tab, (+7) or Select Weight Paint mode 
+tweaking, red shows full weight(1) and blue minimum weight(0), Hold RMB to show brush options
+Go again to the lower right panel (Properties panel) and choose particles, +, hair and what he says 0:32
+(if for some reason, your branch's transform is not right, go back to your object branch in edit mode and try to adjust the rotation)
+0:45 
+Ctrl + PgUp/PgDown to toggle Workplaces until Shading workspace
+in the second tab change from Object to World
+delete the background node
+shift + A, Texture, Environment texture, Open, choose your file, and now plug the node to Surface plug (get free samples on Polyhaven website on its hdris section )
+Z on viewport, Rendered 
+on Render properties tab in the lower right panel (Properties panel) choose 'Cycles' in Render Engine, Film, then you can click on transparency
+Ctrl + Tab to Object mode
+select the branch
+Ctrl + PgUp/PgDown until Shading workspace
+now change it back from World to Object
+Shift + A and pick and connect from the list the nodes he describes
+now select the tree and then New in the middle bar to create its basic texture nodes
+Shift + A, Texture, Image_texture, Open, pick the image from the downloaded file in the description
+(this next step is maybe not necesary, but this is the way to achieve it)
+go to Main menu, Edit, Preferences, Addons, Searchbar: 'node wrangler', and click the checkbox
+Back to Shading workspace 
+Inside the Image_texture node Ctrl + Shift + LMB to create 'viewer node'
+0:54
+Ctrl + PgUp/PgDown to UV Editing WorkSpace
+Ctrl + Tab to change to Edit mode, 
+1 and select all the vertexes, make sure you're selecting all of them
+F3 and in the search bar 'smart UV,' click the only option, and Ok
+select all vertexes in the UV editor and S to scale
+Ctrl + PgUp/PgDown to Shading WorkSpace
+Click your Image_texture node and Shift + D to clone some more to
+add the other textures Open on each and select from the downloded file
+Shift + A, Color, MixRGB to spawn the shown 'Multi node' It's not said with which texture is mixed, though
+Ctrl + PgUp/PgDown to Layout
+Ctrl + Tab + 4 to Object mode
+Z + 8 to set Viewport Shading in Render
+
+there you go.
