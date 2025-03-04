@@ -45,7 +45,12 @@
     moment, however I will try to find it and understand how it works to see if something similar can be incorporated into
     the tree model. Also, because branches habitually will move to areas with more open space to recieve more light, it may
     be useful to acknowledge where branches have room to grow as an important factor as well.
+    - crown shyness
 
 Other Possibilities
 - mess with bevel resolution*
+- scooby do forest
+- weight paint
+- try using shape other than curve or adjusting to be more blocky
+- 
 - 
