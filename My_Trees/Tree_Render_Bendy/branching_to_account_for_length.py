@@ -2,11 +2,34 @@ import bpy
 import math
 import os
 import random
+from pathlib import Path
 
-# File path where the tree will be saved
-blend_file_path = "connected_low_poly_tree.blend"
+# Get the path to the current script's directory
+script_dir = Path(__file__).parent
 
-def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness=0.2, thickness_reduction=0.7):
+# Define the folder for saving the generated blend files
+blend_folder_path = script_dir / "Bendy_Trees"
+
+# Ensure the folder exists (create it if it doesn't)
+blend_folder_path.mkdir(parents=True, exist_ok=True)
+
+# Define the name of the blend file base (without the extension)
+base_blend_name = "generated_tree3d_bendy_wleavesTest"
+
+# Build the full path to the .blend file
+blend_name = f"{base_blend_name}.blend"
+full_path = blend_folder_path / blend_name
+
+# Check if the file already exists, and if so, modify the filename to avoid overwriting
+i = 0
+while os.path.exists(full_path):
+    # Generate the next numbered filename
+    blend_name = f"{base_blend_name}{i}.blend"
+    full_path = blend_folder_path / blend_name
+    i += 1
+
+
+def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness=0.2, thickness_reduction=0.7, branch_length=1.0, branch_length_reduction=0.8):
     # Clear existing objects
     bpy.ops.object.select_all(action='SELECT')
     bpy.ops.object.delete(use_global=False)
@@ -24,12 +47,13 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
     initial_thickness = trunk_thickness
     
     # Recursive function to create branches
-    def create_branch(start_point, direction, thickness, depth):
+    def create_branch(start_point, direction, thickness, depth, branch_length):
         if depth == 0:
             return
         
-        # Vary branch length
-        branch_length = random.uniform(0.7, 1.0) * (max_height / branch_count)
+        # Vary branch length based on the passed branch_length and depth
+        actual_branch_length = branch_length * (max_height / branch_count)
+        actual_branch_length *= (branch_length_reduction ** (branch_count - depth))  # Reduce length with depth
         
         # Slight bend in the branch
         bend_factor = random.uniform(-0.3, 0.3)
@@ -38,7 +62,7 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
         direction_bent = normalize(direction_bent)
         
         # Calculate end point
-        end_point = [start_point[i] + branch_length * direction_bent[i] for i in range(3)]
+        end_point = [start_point[i] + actual_branch_length * direction_bent[i] for i in range(3)]
         
         # Create a spline for this branch
         spline = tree_curve.splines.new('BEZIER')
@@ -81,11 +105,13 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
         angle_between_branches = math.radians(50)
         
         for _ in range(actual_branch_count):
-            angle = random.uniform(-angle_between_branches, angle_between_branches)
+            spread_factor = (branch_count - depth + 4) / branch_count  # Higher depth => larger spread
+            max_angle = math.radians(60)  # Max outward angle for the highest branches
+            angle = random.uniform(-max_angle * spread_factor, max_angle * spread_factor)
             axis = random.choice([[0,0,1], [0,1,0], [1,0,0]])
             new_direction = rotate_vector(direction_bent, axis, angle)
             new_direction = normalize(new_direction)
-            create_branch(end_point, new_direction, new_thickness, next_depth)
+            create_branch(end_point, new_direction, new_thickness, next_depth, branch_length)
     
     # Function to rotate a vector around an axis by a given angle
     def rotate_vector(vector, axis, angle):
@@ -115,7 +141,7 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
     # Start with the initial trunk
     start_point = (0, 0, 0)
     initial_direction = (0, 0, 1)
-    create_branch(start_point, initial_direction, initial_thickness, branch_count)
+    create_branch(start_point, initial_direction, initial_thickness, branch_count, branch_length)
     
     # Set the bevel depth to give the curve thickness
     tree_curve.bevel_depth = 0.02
@@ -125,17 +151,16 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
     print("Tree generated.")
     
 # Set parameters
-branch_count = 4          # Number of recursive branching levels
-max_height = 6            # Maximum tree height
-trunk_thickness = 3     # Initial thickness of the trunk
-thickness_reduction = 0.7 # Rate at which thickness decreases with each level
+branch_count = 5          # Number of recursive branching levels
+max_height = 7            # Maximum tree height
+trunk_thickness = 5       # Initial thickness of the trunk
+thickness_reduction = 0.6 # Rate at which thickness decreases with each level
+branch_length = 1.0      # Default branch length multiplier
+branch_length_reduction = 0. #reduction of branch length with depth
 
 # Run the function to create the tree
-create_connected_low_poly_tree(branch_count, max_height, trunk_thickness, thickness_reduction)
+create_connected_low_poly_tree(branch_count, max_height, trunk_thickness, thickness_reduction, branch_length)
 
-# Save the tree to a .blend file
-if os.path.exists(blend_file_path):
-    os.remove(blend_file_path)
-bpy.ops.wm.save_as_mainfile(filepath=blend_file_path)
-
-print("Connected low-poly tree generated with smooth connections and saved to", blend_file_path)
+# Save the file and print completion confirmation
+bpy.ops.wm.save_as_mainfile(filepath=str(full_path))
+print(f"Connected low-poly tree generated and saved to {blend_folder_path}")
