@@ -29,6 +29,8 @@ choose your image
 Ctrl + Tab(+6), return to Edit Mode 
 Ctrl + R to add rings (We meet again! Now I'm the master!! lmao)
 add more branches
+
+
 (0:20)
 Ctrl + Tab (+4) and go to Object Mode 
 Shift + A, Image, Images as Planes (if the option is not there, go to Edit, Preferences, Addons and type 'Images as Planes' in the searchbox, check the option and close, now you'll find the option in the menu)
@@ -38,6 +40,9 @@ Ctrl + R to activate 'loop cuts' (now we even know its name) point close to an e
 3 to select faces, drag LMB to multi select, or hold shift to add selections, remember to click on the face's center point to add it 
 Shift + K to Knife tool and make the cuts, when finished press enter
 1 to vertex and G to add variation
+
+
+
 0:29
  change to Object mode, select the tree, and go back to Edit mode
  (Now you know how to do it, right? Hold Ctrl + Tab, then #, or hover on and release)
@@ -49,12 +54,14 @@ Ctrl + Tab, (+7) or Select Weight Paint mode
 tweaking, red shows full weight(1) and blue minimum weight(0), Hold RMB to show brush options
 Go again to the lower right panel (Properties panel) and choose particles, +, hair and what he says 0:32
 (if for some reason, your branch's transform is not right, go back to your object branch in edit mode and try to adjust the rotation)
+
+
 0:45 
 Ctrl + PgUp/PgDown to toggle Workplaces until Shading workspace
 in the second tab change from Object to World
 delete the background node
 shift + A, Texture, Environment texture, Open, choose your file, and now plug the node to Surface plug (get free samples on Polyhaven website on its hdris section )
-Z on viewport, Rendered 
+Z on viewport, Rendered a
 on Render properties tab in the lower right panel (Properties panel) choose 'Cycles' in Render Engine, Film, then you can click on transparency
 Ctrl + Tab to Object mode
 select the branch
