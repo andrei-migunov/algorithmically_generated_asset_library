@@ -8,7 +8,7 @@ from pathlib import Path
 script_dir = Path(__file__).parent
 
 # Define the folder for saving the generated blend files
-blend_folder_path = script_dir / "Bendy_Trees"
+blend_folder_path = script_dir / "Bendy_Trees_Space"
 
 # Ensure the folder exists (create it if it doesn't)
 blend_folder_path.mkdir(parents=True, exist_ok=True)
@@ -38,6 +38,7 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
     tree_curve = bpy.data.curves.new(name='TreeCurve', type='CURVE')
     tree_curve.dimensions = '3D'
     tree_curve.resolution_u = 0 #will effect how rigid the tree looks
+    tree_curve.use_fill_caps = True  # Enable fill caps to close the ends
     
     # Create a new object with the curve
     tree_obj = bpy.data.objects.new('Tree', tree_curve)
@@ -145,8 +146,17 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
     
     # Set the bevel depth to give the curve thickness
     tree_curve.bevel_depth = 0.02
-    tree_curve.bevel_resolution = 2
+    tree_curve.bevel_resolution = 5
     tree_curve.fill_mode = 'FULL'
+
+    # Convert all curves to meshes
+    for obj in bpy.context.scene.objects:
+        if obj.type == 'CURVE':
+            # Ensure the object is active and selected
+            bpy.context.view_layer.objects.active = obj
+            obj.select_set(True)
+            bpy.ops.object.convert(target='MESH')
+            print(f"Converted curve {obj.name} to mesh.")
     
     print("Tree generated.")
     
