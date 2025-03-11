@@ -52,5 +52,5 @@ Other Possibilities
 - scooby do forest
 - weight paint
 - try using shape other than curve or adjusting to be more blocky
-- 
-- 
+- *Make collision pre-emptively avoidant tree (use equation)
+- Fractal dimensions
