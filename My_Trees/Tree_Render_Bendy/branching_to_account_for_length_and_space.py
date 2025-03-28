@@ -159,6 +159,75 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
             print(f"Converted curve {obj.name} to mesh.")
     
     print("Tree generated.")
+
+def applyTexture(meshName):
+    # Name of the mesh object to select
+    mesh_name = meshName
+
+    # Define the relative path from the script file to the texture file
+    base_color_relative_path = os.path.join("Textures", "bark_willow_02_4k.blend", "textures", "bark_willow_02_diff_4k.jpg")
+    roughness_relative_path = os.path.join("Textures", "bark_willow_02_4k.blend", "textures", "bark_willow_02_rough_4k.exr")
+    normal_relative_path = os.path.join("Textures", "bark_willow_02_4k.blend", "textures", "bark_willow_02_nor_gl_4k.exr")
+    displacement_relative_path = os.path.join("Textures", "bark_willow_02_4k.blend", "textures", "bark_willow_02_disp_4k.png")
+
+    # Get the directory where this script is located
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the full path to the image
+    base_color_path = os.path.join(script_dir, base_color_relative_path)
+    roughness_path = os.path.join(script_dir, roughness_relative_path)
+    normal_path = os.path.join(script_dir, normal_relative_path)
+    displacement_path = os.path.join(script_dir, displacement_relative_path)
+
+    # Ensure the path is valid
+    if not os.path.exists(base_color_path):
+        print(f"Warning: Base Color not found at {base_color_path}")
+    else:
+        print(f"Base Color found: {base_color_path}")
+    
+    if not os.path.exists(roughness_path):
+        print(f"Warning: Roughness not found at {roughness_path}")
+    else:
+        print(f"Roughness found: {roughness_path}")
+
+    if not os.path.exists(normal_path):
+        print(f"Warning: Normals not found at {normal_path}")
+    else:
+        print(f"Normals found: {normal_path}")
+
+    if not os.path.exists(displacement_path):
+        print(f"Warning: Displacement not found at {displacement_path}")
+    else:
+        print(f"Displacement found: {displacement_path}")
+
+    # Select the mesh object
+    obj = bpy.data.objects.get(mesh_name)
+    if obj and obj.type == 'MESH':
+        bpy.context.view_layer.objects.active = obj
+        obj.select_set(True)
+
+        # Create a new material
+        mat = bpy.data.materials.new(name="BarkMaterial")
+        mat.use_nodes = True
+        obj.data.materials.append(mat)
+    
+        # Get the Principled BSDF node
+        nodes = mat.node_tree.nodes
+        bsdf = next(n for n in nodes if n.type == 'BSDF_PRINCIPLED')
+    
+        # Create an image texture node
+        tex_base_color = nodes.new(type='ShaderNodeTexImage')
+        tex_base_color.image = bpy.data.images.load(base_color_path)
+
+        tex_roughness = nodes.new(type='ShaderNodeTexImage')
+        tex_roughness.image = bpy.data.images.load(roughness_path)
+    
+        # Link the image texture to the base color input
+        mat.node_tree.links.new(bsdf.inputs['Base Color'], tex_base_color.outputs['Color'])
+    
+        print("Material with texture applied successfully.")
+    else:
+        print(f"Object '{mesh_name}' not found or is not a mesh.")
     
 # Set parameters
 branch_count = 5          # Number of recursive branching levels
@@ -170,6 +239,16 @@ branch_length_reduction = 0. #reduction of branch length with depth
 
 # Run the function to create the tree
 create_connected_low_poly_tree(branch_count, max_height, trunk_thickness, thickness_reduction, branch_length)
+
+# Applying the texture
+applyTexture("Tree")
+
+# Change file to material preview mode
+for area in bpy.context.screen.areas:
+    if area.type == 'VIEW_3D':
+        for space in area.spaces:
+            if space.type == 'VIEW_3D':
+                space.shading.type = 'MATERIAL'
 
 # Save the file and print completion confirmation
 bpy.ops.wm.save_as_mainfile(filepath=str(full_path))
