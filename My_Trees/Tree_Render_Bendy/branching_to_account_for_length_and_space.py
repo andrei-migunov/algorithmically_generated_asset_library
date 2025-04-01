@@ -31,7 +31,7 @@ while os.path.exists(full_path):
     i += 1
 
 
-def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness=0.2, thickness_reduction=0.7, branch_length=1.0, branch_length_reduction=0.8):
+def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness=0.2, thickness_reduction=0.7, branch_length=1.0, branch_length_reduction=0.8, add_leaves=False):
     # Clear existing objects
     bpy.ops.object.select_all(action='SELECT')
     bpy.ops.object.delete(use_global=False)
@@ -161,6 +161,9 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
             print(f"Converted curve {obj.name} to mesh.")
     
     print("Tree generated.")
+
+def addSomeLeaves():
+    return 
 
 #funtion that applies textures
 def applyTexture(meshName):
