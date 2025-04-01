@@ -1,3 +1,5 @@
+#texture files were found at https://polyhaven.com/textures/wood/natural
+
 import bpy
 import math
 import os
