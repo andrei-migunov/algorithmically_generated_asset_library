@@ -160,6 +160,7 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
     
     print("Tree generated.")
 
+#funtion that applies textures
 def applyTexture(meshName):
     # Name of the mesh object to select
     mesh_name = meshName
@@ -214,16 +215,34 @@ def applyTexture(meshName):
         # Get the Principled BSDF node
         nodes = mat.node_tree.nodes
         bsdf = next(n for n in nodes if n.type == 'BSDF_PRINCIPLED')
+
+        # Get the Material Output node
+        output_node = next(n for n in nodes if n.type == 'OUTPUT_MATERIAL')
     
-        # Create an image texture node
+        # Create the texture nodes, normal map node, and displacement node
         tex_base_color = nodes.new(type='ShaderNodeTexImage')
         tex_base_color.image = bpy.data.images.load(base_color_path)
 
         tex_roughness = nodes.new(type='ShaderNodeTexImage')
         tex_roughness.image = bpy.data.images.load(roughness_path)
+
+        tex_normal = nodes.new(type='ShaderNodeTexImage')
+        tex_normal.image = bpy.data.images.load(normal_path)
+
+        tex_displacement = nodes.new(type='ShaderNodeTexImage')
+        tex_displacement.image = bpy.data.images.load(displacement_path)
+
+        normal_map = nodes.new(type='ShaderNodeNormalMap')
+
+        displacement = nodes.new(type='ShaderNodeDisplacement')
     
-        # Link the image texture to the base color input
+        # Link the texture nodes to their proper output locations
         mat.node_tree.links.new(bsdf.inputs['Base Color'], tex_base_color.outputs['Color'])
+        mat.node_tree.links.new(bsdf.inputs['Roughness'], tex_roughness.outputs['Color'])
+        mat.node_tree.links.new(normal_map.inputs['Color'], tex_normal.outputs['Color'])
+        mat.node_tree.links.new(bsdf.inputs['Normal'], normal_map.outputs['Normal'])
+        mat.node_tree.links.new(displacement.inputs['Height'], tex_displacement.outputs['Color'])
+        mat.node_tree.links.new(output_node.inputs['Displacement'], displacement.outputs['Displacement'])
     
         print("Material with texture applied successfully.")
     else:
