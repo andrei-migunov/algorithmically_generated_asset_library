@@ -263,6 +263,7 @@ trunk_thickness = 5       # Initial thickness of the trunk
 thickness_reduction = 0.6 # Rate at which thickness decreases with each level
 branch_length = 1.0      # Default branch length multiplier
 branch_length_reduction = 0. #reduction of branch length with depth
+add_leaves = True #should the tree have leaves or not
 
 # Run the function to create the tree
 create_connected_low_poly_tree(branch_count, max_height, trunk_thickness, thickness_reduction, branch_length)
