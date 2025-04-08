@@ -5,6 +5,9 @@ import math
 import os
 import random
 from pathlib import Path
+import addon_utils
+
+addon_utils.enable("io_import_images_as_planes", default_set=True, persistent=True)
 
 # Get the path to the current script's directory
 script_dir = Path(__file__).parent
@@ -266,6 +269,57 @@ create_connected_low_poly_tree(branch_count, max_height, trunk_thickness, thickn
 
 # Applying the texture
 applyTexture("Tree")
+
+# Enable the built-in "Images as Planes" module
+if not bpy.ops.preferences.addon_enable(module="io_import_images_as_planes"):
+    print("Could not enable 'Images as Planes' module.")
+
+# Select the active object (ensure it's a mesh)
+obj = bpy.context.object
+
+if obj and obj.type == 'MESH':
+    # Ensure the object is in Object Mode
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+    # Add a new vertex group
+    vgroup = obj.vertex_groups.new(name="TopWeight")
+
+    # Get the mesh data
+    mesh = obj.data
+    z_values = [v.co.z for v in mesh.vertices]
+    z_threshold = min(z_values) + (max(z_values) - min(z_values)) * 0.5  # Midpoint on Z-axis
+
+    # Assign weights
+    for v in mesh.vertices:
+        weight = 1.0 if v.co.z >= z_threshold else 0.0
+        vgroup.add([v.index], weight, 'REPLACE')
+
+    print(f"Weight painting applied to vertices above {z_threshold} on the Z-axis.")
+
+    # Switch to Weight Paint mode (optional)
+    bpy.ops.object.mode_set(mode='WEIGHT_PAINT')
+else:
+    print("No active mesh object selected.")
+
+#adding the tree branch as a mesh plane
+# Get the directory of the currently running script
+script_dir = os.path.dirname(bpy.data.filepath)
+
+# If the script isn't saved, bpy.data.filepath will be empty, so we can check for that
+if not script_dir:
+    script_dir = os.path.dirname(__file__)
+
+# Construct the relative path to the image
+image_path = os.path.join(script_dir, "Tree Branch.png")
+
+# Check if the image exists
+if os.path.exists(image_path):
+    # Use the "import_as_mesh_planes" operator to import the image as a mesh plane
+    bpy.ops.image.import_as_mesh_planes(filepath=image_path, files=[{"name": "Tree Branch.png"}], directory=script_dir)
+    print(f"Imported 'Tree Branch.png' as a mesh plane.")
+else:
+    print(f"Image file not found at {image_path}. Please check the file path.")
+
 
 # Change file to material preview mode
 for area in bpy.context.screen.areas:
