@@ -5,9 +5,6 @@ import math
 import os
 import random
 from pathlib import Path
-import addon_utils
-
-addon_utils.enable("io_import_images_as_planes", default_set=True, persistent=True)
 
 # Get the path to the current script's directory
 script_dir = Path(__file__).parent
@@ -271,10 +268,6 @@ create_connected_low_poly_tree(branch_count, max_height, trunk_thickness, thickn
 # Applying the texture
 applyTexture("Tree")
 
-# Enable the built-in "Images as Planes" module
-if not bpy.ops.preferences.addon_enable(module="io_import_images_as_planes"):
-    print("Could not enable 'Images as Planes' module.")
-
 # Select the active object (ensure it's a mesh)
 obj = bpy.context.object
 
@@ -305,19 +298,63 @@ else:
 #adding the tree branch as a mesh plane
 # Get the directory of the currently running script
 script_dir = os.path.dirname(bpy.data.filepath)
-
-# If the script isn't saved, bpy.data.filepath will be empty, so we can check for that
 if not script_dir:
     script_dir = os.path.dirname(__file__)
 
-# Construct the relative path to the image
 image_path = os.path.join(script_dir, "Tree Branch.png")
 
-# Check if the image exists
 if os.path.exists(image_path):
-    # Use the "import_as_mesh_planes" operator to import the image as a mesh plane
-    bpy.ops.image.import_as_mesh_planes(filepath=image_path, files=[{"name": "Tree Branch.png"}], directory=script_dir)
-    print(f"Imported 'Tree Branch.png' as a mesh plane.")
+    image = bpy.data.images.load(image_path)
+    print(f"Loaded image: {image.name}")
+
+    width = image.size[0]
+    height = image.size[1]
+
+    # Define how to scale pixels to Blender units
+    scale_factor = 0.01  # 100 pixels = 1 unit
+
+    # Create the plane and scale it to match the image dimensions
+    bpy.ops.mesh.primitive_plane_add(location=(0, 0, 0))
+    plane = bpy.context.object
+    plane.name = "ImagePlane"
+    plane.scale.x = (width * scale_factor) / 2  # Blender's default plane is 2x2
+    plane.scale.y = (height * scale_factor) / 2
+
+    # Create material with texture
+    material = bpy.data.materials.new(name="ImageMaterial")
+    plane.data.materials.append(material)
+    material.use_nodes = True
+    nodes = material.node_tree.nodes
+
+    texture_node = nodes.new(type='ShaderNodeTexImage')
+    texture_node.location = (0, 0)
+    texture_node.image = image
+    texture_node.image.colorspace_settings.is_data = True
+
+    transparent_shader = nodes.new(type='ShaderNodeBsdfTransparent')
+    transparent_shader.location = (200, -200)
+
+    bsdf_node = nodes.get('Principled BSDF')
+    bsdf_node.location = (400, 0)
+
+    mix_shader = nodes.new(type='ShaderNodeMixShader')
+    mix_shader.location = (600, 0)
+
+    material_output_node = nodes.get('Material Output')
+
+    # Link shader nodes
+    material.node_tree.links.new(texture_node.outputs["Color"], bsdf_node.inputs["Base Color"])
+    material.node_tree.links.new(texture_node.outputs["Alpha"], mix_shader.inputs["Fac"])
+    material.node_tree.links.new(transparent_shader.outputs["BSDF"], mix_shader.inputs[1])
+    material.node_tree.links.new(bsdf_node.outputs["BSDF"], mix_shader.inputs[2])
+    material.node_tree.links.new(mix_shader.outputs["Shader"], material_output_node.inputs["Surface"])
+
+    # Reset UV to fill the texture correctly
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.uv.reset()
+    bpy.ops.object.mode_set(mode='OBJECT')
+
+    print("Image loaded and applied to a properly scaled plane with full UV mapping.")
 else:
     print(f"Image file not found at {image_path}. Please check the file path.")
 
