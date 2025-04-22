@@ -1,0 +1,21 @@
+https://en.wikipedia.org/wiki/OpenSimplex_noise
+https://en.wikipedia.org/wiki/Tetragonal_disphenoid_honeycomb
+https://en.wikipedia.org/wiki/Caustic_(optics)
+
+Apophenia
+Perlin Noise
+Pink Noise 
+https://www.redblobgames.com/maps/terrain-from-noise/
+
+Surface CRNs
+Neural Cellular Automata
+https://distill.pub/2020/growing-ca/
+
+Value Noise
+Gradient Noise
+Snell's Window
+
+
+https://iquilezles.org/demoscene/
+https://www.shadertoy.com/view/XtycD1
+https://www.gdcvault.com/play/1024514/Building-Worlds-Using
