@@ -1,0 +1,6 @@
+- For creating space aware branches (branches that do not collide)
+    - *Need to convert curves to mesh or find a way to predict the space that a curve object
+        takes up to be able to predict collisions
+    - Find a way to detect collisions on one end of a branch but not the other
+    - If collision is detected, then terminate branch and re-try with new branch
+        - include a setting that gives up on a branch after a certain number of tries

@@ -37,7 +37,7 @@ def create_connected_low_poly_tree(branch_count=4, max_height=6, trunk_thickness
     # Create a new curve data block for the tree
     tree_curve = bpy.data.curves.new(name='TreeCurve', type='CURVE')
     tree_curve.dimensions = '3D'
-    tree_curve.resolution_u = 2
+    tree_curve.resolution_u = 0 #will effect how rigid the tree looks
     
     # Create a new object with the curve
     tree_obj = bpy.data.objects.new('Tree', tree_curve)
